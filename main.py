@@ -73,7 +73,7 @@ def GetSearchGasSafetyFAQ():
     }
     while True:
       try:
-        response = requests.post('https://www.kgs.or.kr/kgs/aaaa/board.do', cookies=cookies, headers=headers, data=data)
+        response = requests.post('https://www.kgs.or.kr/kgs/aaaa/board.do', cookies=cookies, headers=headers, data=data,verify=False)
         break
       except:
         print("에러발생")
