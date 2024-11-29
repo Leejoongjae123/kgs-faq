@@ -10,6 +10,7 @@ import boto3
 import os
 from dotenv import load_dotenv
 import schedule
+import chromedriver_autoinstaller
 def createFolder(directory):
     try:
         if not os.path.exists(directory):
@@ -265,19 +266,49 @@ def job():
   with open('source/hostingUrlList.json', 'w', encoding='utf-8') as outfile:
       json.dump(hostingUrlList, outfile, ensure_ascii=False, indent=2)
   
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import requests
+import pprint
 
+def chrome_browser(url):
+    chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]  # 크롬 버전을 확인한다.
+    driver_path = f'{chrome_ver}/chromedriver.exe'
 
-firstFlag=True
-# 매일 오전 6시에 job 함수 실행
-schedule.every().day.at("06:00").do(job)
+    if os.path.exists(driver_path):
+        print(f"chromedriver is installed: {driver_path}")  # 있는 버전을 쓴다.
+    else:
+        print(f"install the chrome driver(ver: {chrome_ver})")  # 크롬을 최신 버전으로 설치한다.
+        chromedriver_autoinstaller.install(True)
 
-while True:
-    if firstFlag:
-      firstFlag=False
-      job()
-    print("현재시간:",datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    schedule.run_pending()
-    time.sleep(60)
+    options = webdriver.ChromeOptions()  # 크롬 옵션을 추가한다.
+    options.add_argument('headless')
+    # options.add_argument('--headless=new')
+    options.add_experimental_option("detach", True)  # 크롬 안 꺼지는 옵션 추가
+    options.add_experimental_option("excludeSwitches", ["enable-logging"])  # 크롬 안 꺼지는 옵션 추가
+    
+    browser = webdriver.Chrome(service=Service(driver_path),options=options)  # 크롬 드라이버를 할당
+    browser.get(url)
+    browser.maximize_window()
+    browser.implicitly_wait(3)
+    return browser
+  
+browser=chrome_browser('https://www.kgs.or.kr/kgs/aaaa/board.do')
+soup=BeautifulSoup(browser.page_source, 'html.parser')
+print(soup.prettify())
+# firstFlag=True
+# # 매일 오전 6시에 job 함수 실행
+# schedule.every().day.at("06:00").do(job)
+
+# while True:
+#     if firstFlag:
+#       firstFlag=False
+#       job()
+#     print("현재시간:",datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+#     schedule.run_pending()
+#     time.sleep(60)
 
 
 
