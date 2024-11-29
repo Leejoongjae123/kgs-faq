@@ -266,10 +266,14 @@ def job():
   
 
 
+firstFlag=True
 # 매일 오전 6시에 job 함수 실행
 schedule.every().day.at("06:00").do(job)
 
 while True:
+    if firstFlag:
+      firstFlag=False
+      job()
     print("현재시간:",datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     schedule.run_pending()
     time.sleep(60)
