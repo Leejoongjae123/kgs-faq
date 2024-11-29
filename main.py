@@ -45,6 +45,10 @@ def GetSearchGasSafetyFAQ():
         'JSESSIONID': '82951E27E7102D916CF4E239480FC6E8.tomcat2',
     }
 
+    session = requests.Session()
+    # Expect 헤더 비활성화
+    session.headers.update({'Expect': ''})
+    
     headers = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
         'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
@@ -62,17 +66,18 @@ def GetSearchGasSafetyFAQ():
     }
     while True:
       try:
-        response = requests.post(
+        response = session.post(
             'https://www.kgs.or.kr/kgs/aaaa/board.do', 
             cookies=cookies, 
             headers=headers, 
             data=data,
             verify=False,
-            allow_redirects=True
-        )        
+            allow_redirects=True,
+            timeout=30
+        )
         break
-      except:
-        print("에러발생")
+      except Exception as e:
+        print(f"에러발생: {str(e)}")
         time.sleep(1)
     soup=BeautifulSoup(response.text, 'html.parser')
     with open('source/kgs_faq.html', 'w', encoding='utf-8') as outfile:
