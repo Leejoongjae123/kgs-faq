@@ -457,6 +457,11 @@ def UploadImageToS3(inputData):
   region_name=os.getenv('region_name')
   bucket_name='kgs-code'
 
+  print('aws_access_key_id:',aws_access_key_id)
+  print('aws_secret_access_key:',aws_secret_access_key)
+  print('region_name:',region_name)
+  print('bucket_name:',bucket_name)
+  
   # S3 클라이언트를 생성합니다.
   s3_client = boto3.client(
       's3',
@@ -464,6 +469,8 @@ def UploadImageToS3(inputData):
       aws_secret_access_key=aws_secret_access_key,
       region_name=region_name
   )
+  
+  
       
   try:
       response = s3_client.upload_file(
@@ -576,9 +583,9 @@ def job():
 
 
 
-  files = glob.glob('result/*')
-  for f in files:
-      os.remove(f)
+  # files = glob.glob('result/*')
+  # for f in files:
+  #     os.remove(f)
 
 
 
