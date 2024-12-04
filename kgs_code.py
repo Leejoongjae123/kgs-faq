@@ -331,7 +331,7 @@ def GetDetail(item,infobase):
   infobase['KGS-CODE'][0]['data']['detail']['tableOfContents']=tableOfContents
   infobase['KGS-CODE'][0]['data']['detail']['checkList']=checkList
   
-  with open("result\\"+FileName, "w", encoding='utf-8') as file:
+  with open("result/"+FileName, "w", encoding='utf-8') as file:
     json.dump(infobase, file, ensure_ascii=False, indent=2)
   return infobase
 
