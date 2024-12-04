@@ -568,12 +568,11 @@ def job():
   with open("urlList.json", "r") as file:
     urlList = json.load(file)
   for index,item in enumerate(urlList):
-    if index<=170:
-      continue
     print("{}/{}번째 항목 작업중".format(index+1,len(urlList)))
     result=GetDetail(item,infobase)
     UploadImageToS3(result)
     print('===================================')
+    break
 
 
 
@@ -594,4 +593,5 @@ while True:
     print("현재시간은:",datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     schedule.run_pending()
     time.sleep(10)  # 1분마다 체크
+    
 
