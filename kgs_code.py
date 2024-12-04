@@ -585,8 +585,12 @@ def job():
 
 # 매주 월요일 9시에 job 함수 실행
 schedule.every().monday.at("09:00").do(job)
-
+firstFlag=True
 while True:
+    if firstFlag:
+        print("첫 실행")
+        firstFlag=False
+        job()
     print("현재시간은:",datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     schedule.run_pending()
     time.sleep(10)  # 1분마다 체크
