@@ -579,13 +579,12 @@ def job():
     result=GetDetail(item,infobase)
     UploadImageToS3(result)
     print('===================================')
-    break
 
 
 
-  # files = glob.glob('result/*')
-  # for f in files:
-  #     os.remove(f)
+  files = glob.glob('result/*')
+  for f in files:
+      os.remove(f)
 
 
 
